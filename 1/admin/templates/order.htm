@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$lang.home}{if $ur_here} - {$ur_here} {/if}</title>
+<meta name="Copyright" content="Douco Design." />
+<link href="templates/public.css" rel="stylesheet" type="text/css">
+{include file="javascript.htm"}
+<script type="text/javascript" src="images/jquery.autotextarea.js"></script>
+</head>
+<body>
+<div id="dcWrap"> {include file="header.htm"}
+ <div id="dcLeft">{include file="menu.htm"}</div>
+ <div id="dcMain"> {include file="ur_here.htm"}
+  <div class="mainBox" style="{$workspace.height}"> 
+   <!-- {if $rec eq 'default'} 订单列表 -->
+   <h3>{$ur_here}</h3>
+   <div class="filter">
+    <form action="order.php" method="post">
+     <select name="key">
+      <!-- {foreach from=$key item=key} -->
+      <option value="{$key.value}"{if $key.cur} selected="selected"{/if}>{$key.name}</option>
+      <!-- {/foreach} -->
+     </select>
+     <input name="keyword" type="text" class="inpMain" value="{$keyword}" size="20" />
+     <input name="submit" class="btnGray" type="submit" value="{$lang.btn_filter}" />
+    </form>
+   </div>
+   <div id="list">
+    <form name="action" method="post" action="order.php?rec=action">
+     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+      <tr>
+       <th width="22" align="center"><input name='chkall' type='checkbox' id='chkall' onclick='selectcheckbox(this.form)' value='check'></th>
+       <th width="40" align="center">{$lang.record_id}</th>
+       <th align="left">{$lang.order_order_sn}</th>
+       <th align="center">{$lang.order_email}</th>
+       <th align="center">{$lang.order_telphone}</th>
+       <th align="center">{$lang.order_contact}</th>
+       <th align="center">{$lang.order_order_amount}</th>
+       <th align="center">{$lang.order_status}</th>
+       <th align="center">{$lang.order_add_time}</th>
+       <th width="80" align="center">{$lang.handler}</th>
+      </tr>
+      <!-- {foreach from=$order_list item=order} -->
+      <tr>
+       <td align="center"><input type="checkbox" name="checkbox[]" value="{$order.order_id}" /></td>
+       <td align="center">{$order.order_id}</td>
+       <td><a href="order.php?rec=view&order_id={$order.order_id}">{$order.order_sn}</a></td>
+       <td align="center">{$order.email}</td>
+       <td align="center">{$order.telphone}</td>
+       <td align="center">{$order.contact}</td>
+       <td align="center">{$order.order_amount}</td>
+       <td align="center">{$order.status_format}</td>
+       <td align="center">{$order.add_time}</td>
+       <td align="center"><a href="order.php?rec=view&order_id={$order.order_id}">{$lang.view}</a> | <a href="order.php?rec=del&order_id={$order.order_id}">{$lang.del}</a></td>
+      </tr>
+      <!-- {/foreach} -->
+     </table>
+     <div class="action">
+      <select name="action">
+       <option value="0">{$lang.select}</option>
+       <option value="del_all">{$lang.del}</option>
+       <option value="cancel_all">{$lang.order_cancel}</option>
+      </select>
+      <input name="submit" class="btn" type="submit" value="{$lang.btn_execute}" />
+     </div>
+    </form>
+   </div>
+   <div class="clear"></div>
+   {include file="pager.htm"} 
+   <!-- {/if} --> 
+   <!-- {if $rec eq 'view'} 订单详情 -->
+   <div id="order">
+    <h3><a href="{$action_link.href}" class="actionBtn">{$action_link.text}</a>{$ur_here}</h3>
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+     <tr>
+      <th colspan="4" align="left">{$lang.order_order_sn}：{$order.order_sn}</th>
+      <th colspan="4" align="right">{$lang.order_status}：{$order.status_format}</th>
+     </tr>
+     <tr>
+      <td width="60">{$lang.order_contact}：</td>
+      <td>{$order.contact}</td>
+      <td width="60">{$lang.order_telphone}：</td>
+      <td>{$order.telphone}</td>
+      <td width="60">{$lang.order_email}：</td>
+      <td>{$order.email}</td>
+      <td width="60" align="right">{$lang.order_postcode}：</td>
+      <td>{$order.postcode}</td>
+     </tr>
+     <tr>
+      <td>{$lang.order_address}：</td>
+      <td colspan="7">{$order.address}</td>
+     </tr>
+     <tr>
+      <td>{$lang.order_payment}：</td>
+      <td>{$order.pay_name}</td>
+      <td>{$lang.order_shipping}：</td>
+      <td colspan="3">{$order.shipping_name}</td>
+      <td align="right">{$lang.order_add_time}：</td>
+      <td>{$order.add_time}</td>
+     </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic" style="margin:30px 0;">
+     <tr>
+      <td align="left"><strong>{$lang.order_name}</strong></td>
+      <td width="150" align="center"><strong>{$lang.order_price}</strong></td>
+      <td width="150" align="center"><strong>{$lang.number}</strong></td>
+     </tr>
+     <!-- {foreach from=$order.product_list item=product} -->
+     <tr>
+      <td><a href="{$product.url}" target="_blank">{$product.name}</a></td>
+      <td align="center">{$product.price}</td>
+      <td align="center">x {$product.product_number}</td>
+     </tr>
+     <!-- {/foreach} -->
+     <tr>
+      <td colspan="3" align="right" style="line-height:180%">
+       {$lang.order_product_amount}：{$order.product_amount_format}<br />
+       {$lang.order_shipping_fee}：{$order.shipping_fee_format}<br />
+       {$lang.order_order_amount}：{$order.order_amount_format}</td>
+      </td>
+     </tr>
+    </table>
+    <div class="tracking">
+     <div class="trackingNo"><!-- {if $order.tracking_no} -->{$order.shipping_name}：{$order.tracking_no} 
+     <button class="btnShow" type="button">{$lang.edit}</button><!-- {/if} --></div>
+     <div class="trackingSubmit">
+     <div id="actionBox"{if $order.tracking_no} class="edit"{/if}>
+     <form action="order.php?rec=tracking" method="post">
+      <select name="shipping_id">
+       <option value="0">{$lang.order_shipping_select}</option>
+       <!-- {foreach from=$shipping_list item=shipping} -->
+       <!-- {if $shipping.unique_id eq $order.shipping_id} -->
+       <option value="{$shipping.unique_id}" selected="selected">{$shipping.name}</option>
+       <!-- {else} -->
+       <option value="{$shipping.unique_id}">{$shipping.name}</option>
+       <!-- {/if} -->
+       <!-- {/foreach} -->
+      </select>
+      <input name="tracking_no" type="text" class="inpMain" value="{$order.tracking_no}" size="40" />
+      <input type="hidden" name="order_id" value="{$order.order_id}">
+      <input name="submit" class="btn" type="submit" value="{$lang.order_tracking_submit}" />
+     </form>
+     <!-- {if $order.tracking_no} --><button class="btnHide" type="button">{$lang.cancel}</button><!-- {/if} -->
+     </div>
+     </div>
+    </div>
+   </div>
+   <!-- {/if} --> 
+ </div>
+ </div>
+ {include file="footer.htm"}
+ </div>
+<script type="text/javascript">
+ {literal}
+ onload = function() {document.forms['action'].reset();}
+ {/literal}
+ </script>
+</body>
+</html>
