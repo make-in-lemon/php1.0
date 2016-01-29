@@ -1,42 +1,43 @@
-<?php
-/**
- * DouPHP
- * --------------------------------------------------------------------------------------------------
- * ç‰ˆæƒæ‰€æœ‰ 2013-2014 æ¼³å·žè±†å£³ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸ï¼Œå¹¶ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
- * ç½‘ç«™åœ°å€: http://www.douco.com
- * --------------------------------------------------------------------------------------------------
- * è¿™ä¸æ˜¯ä¸€ä¸ªè‡ªç”±è½¯ä»¶ï¼æ‚¨åªèƒ½åœ¨éµå®ˆæŽˆæƒåè®®å‰æä¸‹å¯¹ç¨‹åºä»£ç è¿›è¡Œä¿®æ”¹å’Œä½¿ç”¨ï¼›ä¸å…è®¸å¯¹ç¨‹åºä»£ç ä»¥ä»»ä½•å½¢å¼ä»»ä½•ç›®çš„çš„å†å‘å¸ƒã€‚
- * æŽˆæƒåè®®ï¼šhttp://www.douco.com/license.html
- * --------------------------------------------------------------------------------------------------
- * Author: DouCo
- * Release Date: 2014-06-05
- */
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <td>ÓÃ»§ID</td>
+            <td>ÓÃ»§Ãû³Æ</td>
+        </tr>
+        <tr>
+            <?php
+            /*
+             * SAE_MYSQL_USER:ÓÃ»§Ãû 
+             * SAE_MYSQL_PASS£ºÃÜÂë£º 
+             * SAE_MYSQL_HOST_M£ºÖ÷¿âÓòÃû
+             * SAE_MYSQL_HOST_S£º´Ó¿âÓòÃû 
+             * SAE_MYSQL_PORT£º¶Ë¿Ú£º 
+             * SAE_MYSQL_DBÊý¾Ý¿âÃû
+             * 
+             * ÏêÏ¸ËµÃ÷£ºÒ³ÃæµÄ±àÂëÒªºÍÊý¾Ý¿âµÄ±àÂëÒ»Ñù£¬²»È»»á³öÏÖÂÒÂë
+             * »òÕßÔÚÁ¬½ÓÊý¾Ý¿âÊ±ÉèÖÃmysql_set_charset()
+             * 
+             */
+            $link = mysql_connect ( SAE_MYSQL_HOST_M . ':' . SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS );
+            if ($link) {
+                mysql_select_db ( SAE_MYSQL_DB, $link );
+                mysql_set_charset("gbk");
+                $sql = "select UID,UNAME from Base_User";
+                $result = mysql_query ( $sql );
+                while ( $row = mysql_fetch_array ( $result, MYSQL_NUM ) ) {
+                    echo ("<td>$row[0]</td><td>$row[1]</td>");
+                }
+                mysql_free_result ( $result );
+            } else {
+                echo "Êý¾Ý¿âÁ¬½ÓKO";
+            }
+            ?>
+        </tr>
 
-/*// database host
-$dbhost   = "localhost";
-
-// database name
-$dbname   = "xm1";
-
-// database username
-$dbuser   = "root";
-
-// database password
-$dbpass   = "123456";
-
-// table prefix
-$prefix   = "dou_";
-
-// charset
-define('DOU_CHARSET','utf-8');
-
-// administrator path
-define('ADMIN_PATH','admin');
-
-// mobile path
-define('M_PATH','m');*/
-
-$con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);if(!$con){ die('could not connect:'.mysql_error()); }mysql_select_db(SAE_MYSQL_DB,$con);
-
-
-?>
+    </table>
+</body>
+</html>
