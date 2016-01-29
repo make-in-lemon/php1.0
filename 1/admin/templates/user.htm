@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$lang.home}{if $ur_here} - {$ur_here} {/if}</title>
+<meta name="Copyright" content="Douco Design." />
+<link href="templates/public.css" rel="stylesheet" type="text/css">
+{include file="javascript.htm"}
+<script type="text/javascript" src="images/jquery.autotextarea.js"></script>
+</head>
+<body>
+<div id="dcWrap">
+ {include file="header.htm"}
+ <div id="dcLeft">{include file="menu.htm"}</div>
+ <div id="dcMain">
+   {include file="ur_here.htm"}
+   <div class="mainBox" style="{$workspace.height}">
+    <!-- {if $rec eq 'default'} 会员列表 -->
+    <h3>{$ur_here}</h3>
+    <div class="filter">
+    <form action="user.php" method="post">
+     <select name="key">
+      <!-- {foreach from=$key item=key} -->
+      <option value="{$key.value}"{if $key.cur} selected="selected"{/if}>{$key.name}</option>
+      <!-- {/foreach} -->
+     </select>
+     <input name="keyword" type="text" class="inpMain" value="{$keyword}" size="20" />
+     <input name="submit" class="btnGray" type="submit" value="{$lang.btn_filter}" />
+    </form>
+    </div>
+    <div id="list">
+    <form name="action" method="post" action="user.php?rec=action">
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+     <tr>
+      <th width="22" align="center"><input name='chkall' type='checkbox' id='chkall' onclick='selectcheckbox(this.form)' value='check'></th>
+      <th width="40" align="center">{$lang.record_id}</th>
+      <th align="left">{$lang.user_email}</th>
+      <th align="center">{$lang.user_telphone}</th>
+      <th align="center">{$lang.user_contact}</th>
+      <th align="center">{$lang.user_add_time}</th>
+      <th align="center">{$lang.user_login_count}</th>
+      <th align="center">{$lang.user_last_login}</th>
+      <th width="80" align="center">{$lang.handler}</th>
+     </tr>
+     <!-- {foreach from=$user_list item=user} -->
+     <tr>
+      <td align="center"><input type="checkbox" name="checkbox[]" value="{$user.user_id}" /></td>
+      <td align="center">{$user.user_id}</td>
+      <td><a href="user.php?rec=edit&user_id={$user.user_id}">{$user.email}</a></td>
+      <td align="center">{$user.telphone}</td>
+      <td align="center">{$user.contact}</td>
+      <td align="center">{$user.add_time}</td>
+      <td align="center">{$user.login_count}</td>
+      <td align="center">{$user.last_login}</td>
+      <td align="center">
+       <a href="user.php?rec=edit&user_id={$user.user_id}">{$lang.edit}</a> | <a href="user.php?rec=del&user_id={$user.user_id}">{$lang.del}</a>
+      </td>
+     </tr>
+     <!-- {/foreach} -->
+    </table>
+    <div class="action">
+     <select name="action">
+      <option value="0">{$lang.select}</option>
+      <option value="del_all">{$lang.del}</option>
+      <!-- {if $excel} -->
+      <option value="excel">{$lang.user_excel}</option>
+      <option value="excel_all">{$lang.user_excel_all}</option>
+      <!-- {/if} -->
+     </select>
+     <input name="submit" class="btn" type="submit" value="{$lang.btn_execute}" />
+    </div>
+    </form>
+    </div>
+    <div class="clear"></div>
+    {include file="pager.htm"}
+    <!-- {/if} -->
+    <!-- {if $rec eq 'edit'} 会员信息编辑 -->
+    <h3><a href="{$action_link.href}" class="actionBtn">{$action_link.text}</a>{$ur_here}</h3>
+    <form action="user.php?rec=update" method="post" enctype="multipart/form-data">
+     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+      <tr>
+       <td width="90" align="right">{$lang.user_email}</td>
+       <td>
+        <input type="text" name="email" value="{$user.email}" size="80" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">{$lang.user_password_new}</td>
+       <td><input type="password" name="password" class="inpMain" /><span class="cue ml">{$lang.user_password_new_cue}</span></td>
+      </tr>
+      <tr>
+       <td width="100" align="right">{$lang.user_nickname}</td>
+       <td><input type="text" name="nickname" value="{$user.nickname}" size="80" class="inpMain" /></td>
+      </tr>
+      <tr>
+       <td width="100" align="right">{$lang.user_telphone}</td>
+       <td><input type="text" name="telphone" value="{$user.telphone}" size="80" class="inpMain" /></td>
+      </tr>
+      <tr>
+       <td width="100" align="right">{$lang.user_contact}</td>
+       <td><input type="text" name="contact" value="{$user.contact}" size="80" class="inpMain" /></td>
+      </tr>
+      <tr>
+       <td width="100" align="right">{$lang.user_address}</td>
+       <td><input type="text" name="address" value="{$user.address}" size="80" class="inpMain" /></td>
+      </tr>
+      <tr>
+       <td width="100" align="right">{$lang.user_postcode}</td>
+       <td><input type="text" name="postcode" value="{$user.postcode}" size="80" class="inpMain" /></td>
+      </tr>
+      <tr>
+       <td width="100" align="right">{$lang.user_sex}</td>
+       <td>
+       <label for="sex_1">
+        <input type="radio" name="sex" id="sex_1" value="1"{if $user.sex eq '1'} checked="true"{/if}>
+        {$lang.user_man}</label>
+       <label for="sex_0">
+        <input type="radio" name="sex" id="sex_0" value="0"{if $user.sex eq '0'} checked="true"{/if}>
+        {$lang.user_woman}</label>
+        {$wrong.sex}</td>
+      </tr>
+      <!-- {if $user.defined} -->
+      <tr>
+       <td width="100" align="right">{$lang.user_defined}</td>
+       <td>
+        <textarea name="defined" id="defined" cols="83" class="textAreaAuto" style="height:{$user.defined_count}0px">{$user.defined}</textarea>
+       </td>
+      </tr>
+      <!-- {/if} -->
+      <tr>
+       <td></td>
+       <td>
+        <input type="hidden" name="token" value="{$token}" />
+        <input type="hidden" name="user_id" value="{$user.user_id}">
+        <input name="submit" class="btn" type="submit" value="{$lang.btn_submit}" />
+       </td>
+      </tr>
+     </table>
+    </form>
+    <!-- {/if} -->
+   </div>
+ </div>
+ {include file="footer.htm"}
+ </div>
+ <script type="text/javascript">
+ {literal}
+ onload = function()
+ {
+   document.forms['action'].reset();
+ }
+ {/literal}
+ </script>
+</body>
+</html>
