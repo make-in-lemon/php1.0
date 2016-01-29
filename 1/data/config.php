@@ -36,16 +36,19 @@ define('ADMIN_PATH','admin');
 // mobile path
 define('M_PATH','m');*/
 
-	header("Content-type:text/html;charset=utf-8");
-	$dou = new Action(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS, SAE_MYSQL_DB, $prefix, DOU_CHARSET);
-	//$con=mysql_connect(SAE_MYSQL_HOST_M.":".SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
-    mysql_select_db(SAE_MYSQL_DB,$dou);
-	if(!$dou){echo "错误!" .mysql_error();}
-	
-	//mysql_select_db("users",$dou);  //数据库名字
 
-	mysql_query("SET character_set_connection=utf8, character_set_results=utf8, character_set_client=utf8", $dou);
-	mysql_query("SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO'", $dou);
+// 连主库
+$db = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
+
+// 连从库
+// $db = mysql_connect(SAE_MYSQL_HOST_S.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
+
+if ($link) {
+    mysql_select_db(SAE_MYSQL_DB, $db);
+
+    // ...
+}
+
 
 
 
