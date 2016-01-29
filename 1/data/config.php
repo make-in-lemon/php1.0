@@ -36,20 +36,7 @@ define('ADMIN_PATH','admin');
 // mobile path
 define('M_PATH','m');*/
 
-
-// 连主库
-$db = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
-
-// 连从库
-// $db = mysql_connect(SAE_MYSQL_HOST_S.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
-
-if ($link) {
-    mysql_select_db(SAE_MYSQL_DB, $db);
-
-    // ...
-}
-
-
+$con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);if(!$con){ die('could not connect:'.mysql_error()); }mysql_select_db(SAE_MYSQL_DB,$con);
 
 
 ?>
